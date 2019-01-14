@@ -1,0 +1,29 @@
+#Joining two tables called it DENEME_1
+
+SELECT i_users.username, i_users.emailaddress, i_user_login_logs.login_date
+FROM i_user_login_logs INNER JOIN i_users ON i_user_login_logs.userId = i_users.userId;
+
+#Counting username based login counts called it DENEME_2
+
+SELECT i_users.username,COUNT(username) as Count
+FROM(SELECT i_users.username, i_users.emailaddress, i_user_login_logs.login_date
+FROM i_user_login_logs INNER JOIN i_users ON i_user_login_logs.userId = i_users.userId)
+GROUP BY username
+
+#Joining DENEME_1 and DENEME_2 queries to match username and login counts called it DENEME_3
+
+SELECT DENEME_1.username, DENEME_1.emailaddress, DENEME_2.Count
+FROM DENEME_1 INNER JOIN DENEME_2 ON DENEME_1.username = DENEME_2.username;
+
+#Excluding Administrator,called it DENEME_4
+
+SELECT*FROM
+(SELECT DENEME_1.username, DENEME_1.emailaddress, DENEME_2.Count
+FROM DENEME_1 INNER JOIN DENEME_2 ON DENEME_1.username = DENEME_2.username)
+WHERE username Not In ('Administrator');
+
+#Choose the highest value of Count Column in DENEME_4
+
+SELECT *
+FROM DENEME_4
+WHERE Count IN (SELECT max(Count) From DENEME_4);
